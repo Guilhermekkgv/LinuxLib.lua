@@ -9,7 +9,8 @@ function Linux:Create(config)
     Frame.Size = config.Size or UDim2.fromOffset(500, 350)
     Frame.Position = UDim2.new(0.5, -250, 0.5, -175)
     Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    Frame.BorderSizePixel = 0
+    Frame.BorderSizePixel = 1
+    Frame.BorderColor3 = Color3.fromRGB(128, 0, 128)
     Frame.Active = true
     Frame.Draggable = true
     Frame.Parent = ScreenGui
@@ -60,7 +61,7 @@ function Linux:Create(config)
         TabButton.Text = name
         TabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
         TabButton.TextSize = 16
-        TabButton.Font = Enum.Font.SourceSans
+        TabButton.Font =1 Enum.Font.SourceSans
         TabButton.Parent = TabContainer
         
         local TabContent = Instance.new("Frame")
@@ -78,15 +79,20 @@ function Linux:Create(config)
             for _, button in pairs(TabContainer:GetChildren()) do
                 if button:IsA("TextButton") then
                     button.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+                    button.BorderSizePixel = 0
                 end
             end
             TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            TabButton.BorderSizePixel = 1
+            TabButton.BorderColor3 = Color3.fromRGB(128, 0, 128)
         end)
         
         if #Tabs == 0 then
             TabContent.Visible = true
             CurrentTab = TabContent
             TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            TabButton.BorderSizePixel = 1
+            TabButton.BorderColor3 = Color3.fromRGB(128, 0, 128)
         end
         
         table.insert(Tabs, TabContent)
@@ -131,7 +137,7 @@ function Linux:Create(config)
             local ToggleKnob = Instance.new("Frame")
             ToggleKnob.Size = UDim2.new(0, 20, 0, 20)
             ToggleKnob.Position = default and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
-            ToggleKnob.BackgroundColor3 = default and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(150, 150, 150)
+            ToggleKnob.BackgroundColor3 = default and Color3.fromRGB(128, 0, 128) or Color3.fromRGB(150, 150, 150)
             ToggleKnob.BorderSizePixel = 0
             ToggleKnob.Parent = ToggleSwitch
             
@@ -148,9 +154,9 @@ function Linux:Create(config)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     state = not state
                     local newPos = state and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
-                    local newColor = state and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(150, 150, 150)
+                    local newColor = state and Color3.fromRGB(128, 0, 128) or Color3.fromRGB(150, 150, 150)
                     TweenService:Create(ToggleKnob, toggleTween, {Position = newPos, BackgroundColor3 = newColor}):Play()
-                    TweenService:Create(ToggleSwitch, toggleTween, {BACKGROUNDColor3 = state and Color3.fromRGB(80, 80, 80) or Color3.fromRGB(60, 60, 60)}):Play()
+                    TweenService:Create(ToggleSwitch, toggleTween, {BackgroundColor3 = state and Color3.fromRGB(80, 80, 80) or Color3.fromRGB(60, 60, 60)}):Play()
                     callback(state)
                 end
             end)
