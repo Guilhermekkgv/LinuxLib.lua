@@ -6,10 +6,12 @@ function Linux:Create(config)
     ScreenGui.ResetOnSpawn = false
     
     local Frame = Instance.new("Frame")
-    Frame.Size = config.Size or UDim2.fromOffset(500, 350)
-    Frame.Position = UDim2.new(0.5, -Frame.Size.X.Offset / 2, 0.5, -Frame.Size.Y.Offset / 2)
+    Frame.Size = config.Size or UDim2.fromOffset(300, 400)
+    Frame.Position = UDim2.new(0.5, -150, 0.5, -200)
     Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     Frame.BorderSizePixel = 0
+    Frame.Active = true
+    Frame.Draggable = true
     Frame.Parent = ScreenGui
     
     local TopBar = Instance.new("Frame")
@@ -69,11 +71,18 @@ function Linux:Create(config)
             end
             TabContent.Visible = true
             CurrentTab = TabContent
+            for _, button in pairs(TabContainer:GetChildren()) do
+                if button:IsA("TextButton") then
+                    button.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+                end
+            end
+            TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         end)
         
         if #Tabs == 0 then
             TabContent.Visible = true
             CurrentTab = TabContent
+            TabButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         end
         
         table.insert(Tabs, TabContent)
@@ -93,9 +102,9 @@ function Linux:Create(config)
             UICorner.Parent = ToggleFrame
             
             local ToggleLabel = Instance.new("TextLabel")
-            ToggleLabel.Size = UDim2.new(0, 300, 1, 0)
+            ToggleLabel.Size = UDim2.new(0, 200, 1, 0)
             ToggleLabel.Position = UDim2.new(0, 10, 0, 0)
-            ToggleLabel.BackgroundTransparency = 1
+            ToggleLabel.BackgroundTheta = 1
             ToggleLabel.Text = name
             ToggleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
             ToggleLabel.TextSize = 16
