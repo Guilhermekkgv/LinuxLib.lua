@@ -29,18 +29,22 @@ function Linux:Create(config)
     TitleLabel.Font = Enum.Font.SourceSansBold
     TitleLabel.Parent = TopBar
     
-    local TabContainer = Instance.new("Frame")
+    local TabContainer = Instance.new("ScrollingFrame")
     TabContainer.Size = UDim2.new(1, 0, 0, 30)
     TabContainer.Position = UDim2.new(0, 0, 0, 30)
     TabContainer.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
     TabContainer.BorderSizePixel = 0
+    TabContainer.ScrollBarThickness = 0
+    TabContainer.CanvasSize = UDim2.new(0, 0, 0, 0)
     TabContainer.Parent = Frame
     
-    local Content = Instance.new("Frame")
+    local Content = Instance.new("ScrollingFrame")
     Content.Size = UDim2.new(1, 0, 1, -60)
     Content.Position = UDim2.new(0, 0, 0, 60)
     Content.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
     Content.BorderSizePixel = 0
+    Content.ScrollBarThickness = 0
+    Content.CanvasSize = UDim2.new(0, 0, 0, 0)
     Content.Parent = Frame
     
     local Window = {}
@@ -86,6 +90,7 @@ function Linux:Create(config)
         end
         
         table.insert(Tabs, TabContent)
+        TabContainer.CanvasSize = UDim2.new(0, #Tabs * 100, 0, 0)
         
         local Tab = {}
         
@@ -145,10 +150,12 @@ function Linux:Create(config)
                     local newPos = state and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
                     local newColor = state and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(150, 150, 150)
                     TweenService:Create(ToggleKnob, toggleTween, {Position = newPos, BackgroundColor3 = newColor}):Play()
-                    TweenService:Create(ToggleSwitch, toggleTween, {BackgroundColor3 = state and Color3.fromRGB(80, 80, 80) or Color3.fromRGB(60, 60, 60)}):Play()
+                    TweenService:Create(ToggleSwitch, toggleTween, {BACKGROUNDColor3 = state and Color3.fromRGB(80, 80, 80) or Color3.fromRGB(60, 60, 60)}):Play()
                     callback(state)
                 end
             end)
+            
+            Content.CanvasSize = UDim2.new(0, 0, 0, #TabContent:GetChildren() * 45)
         end
         
         return Tab
