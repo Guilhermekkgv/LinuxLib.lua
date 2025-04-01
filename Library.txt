@@ -1,0 +1,151 @@
+local Linux = {}
+
+function Linux:Create(config)
+    local ScreenGui = Instance.new("ScreenGui")
+    ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+    ScreenGui.ResetOnSpawn = false
+    
+    local Frame = Instance.new("Frame")
+    Frame.Size = config.Size or UDim2.fromOffset(500, 350)
+    Frame.Position = UDim2.new(0.5, -Frame.Size.X.Offset / 2, 0.5, -Frame.Size.Y.Offset / 2)
+    Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    Frame.BorderSizePixel = 0
+    Frame.Parent = ScreenGui
+    
+    local TopBar = Instance.new("Frame")
+    TopBar.Size = UDim2.new(1, 0, 0, 30)
+    TopBar.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    TopBar.BorderSizePixel = 0
+    TopBar.Parent = Frame
+    
+    local TitleLabel = Instance.new("TextLabel")
+    TitleLabel.Size = UDim2.new(1, 0, 1, 0)
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Text = config.Name or "Linux Hub"
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.TextSize = 18
+    TitleLabel.Font = Enum.Font.SourceSansBold
+    TitleLabel.Parent = TopBar
+    
+    local TabContainer = Instance.new("Frame")
+    TabContainer.Size = UDim2.new(1, 0, 0, 30)
+    TabContainer.Position = UDim2.new(0, 0, 0, 30)
+    TabContainer.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    TabContainer.BorderSizePixel = 0
+    TabContainer.Parent = Frame
+    
+    local Content = Instance.new("Frame")
+    Content.Size = UDim2.new(1, 0, 1, -60)
+    Content.Position = UDim2.new(0, 0, 0, 60)
+    Content.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    Content.BorderSizePixel = 0
+    Content.Parent = Frame
+    
+    local Window = {}
+    local Tabs = {}
+    local CurrentTab = nil
+    
+    function Window:Tab(name, icon)
+        local TabButton = Instance.new("TextButton")
+        TabButton.Size = UDim2.new(0, 100, 1, 0)
+        TabButton.Position = UDim2.new(0, #Tabs * 100, 0, 0)
+        TabButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+        TabButton.BorderSizePixel = 0
+        TabButton.Text = name
+        TabButton.TextColor3 = Color3.fromRGB(200, 200, 200)
+        TabButton.TextSize = 16
+        TabButton.Font = Enum.Font.SourceSans
+        TabButton.Parent = TabContainer
+        
+        local TabContent = Instance.new("Frame")
+        TabContent.Size = UDim2.new(1, 0, 1, 0)
+        TabContent.BackgroundTransparency = 1
+        TabContent.Visible = false
+        TabContent.Parent = Content
+        
+        TabButton.MouseButton1Click:Connect(function()
+            if CurrentTab then
+                CurrentTab.Visible = false
+            end
+            TabContent.Visible = true
+            CurrentTab = TabContent
+        end)
+        
+        if #Tabs == 0 then
+            TabContent.Visible = true
+            CurrentTab = TabContent
+        end
+        
+        table.insert(Tabs, TabContent)
+        
+        local Tab = {}
+        
+        function Tab:Toggle(name, default, callback)
+            local ToggleFrame = Instance.new("Frame")
+            ToggleFrame.Size = UDim2.new(0.95, 0, 0, 40)
+            ToggleFrame.Position = UDim2.new(0.025, 0, 0, #TabContent:GetChildren() * 45)
+            ToggleFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+            ToggleFrame.BorderSizePixel = 0
+            ToggleFrame.Parent = TabContent
+            
+            local UICorner = Instance.new("UICorner")
+            UICorner.CornerRadius = UDim.new(0, 8)
+            UICorner.Parent = ToggleFrame
+            
+            local ToggleLabel = Instance.new("TextLabel")
+            ToggleLabel.Size = UDim2.new(0, 300, 1, 0)
+            ToggleLabel.Position = UDim2.new(0, 10, 0, 0)
+            ToggleLabel.BackgroundTransparency = 1
+            ToggleLabel.Text = name
+            ToggleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+            ToggleLabel.TextSize = 16
+            ToggleLabel.Font = Enum.Font.SourceSans
+            ToggleLabel.TextXAlignment = Enum.TextXAlignment.Left
+            ToggleLabel.Parent = ToggleFrame
+            
+            local ToggleSwitch = Instance.new("Frame")
+            ToggleSwitch.Size = UDim2.new(0, 50, 0, 24)
+            ToggleSwitch.Position = UDim2.new(1, -60, 0.5, -12)
+            ToggleSwitch.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+            ToggleSwitch.BorderSizePixel = 0
+            ToggleSwitch.Parent = ToggleFrame
+            
+            local SwitchCorner = Instance.new("UICorner")
+            SwitchCorner.CornerRadius = UDim.new(0, 12)
+            SwitchCorner.Parent = ToggleSwitch
+            
+            local ToggleKnob = Instance.new("Frame")
+            ToggleKnob.Size = UDim2.new(0, 20, 0, 20)
+            ToggleKnob.Position = default and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
+            ToggleKnob.BackgroundColor3 = default and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(150, 150, 150)
+            ToggleKnob.BorderSizePixel = 0
+            ToggleKnob.Parent = ToggleSwitch
+            
+            local KnobCorner = Instance.new("UICorner")
+            KnobCorner.CornerRadius = UDim.new(0, 10)
+            KnobCorner.Parent = ToggleKnob
+            
+            local state = default or false
+            
+            local TweenService = game:GetService("TweenService")
+            local toggleTween = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+            
+            ToggleSwitch.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    state = not state
+                    local newPos = state and UDim2.new(1, -22, 0.5, -10) or UDim2.new(0, 2, 0.5, -10)
+                    local newColor = state and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(150, 150, 150)
+                    TweenService:Create(ToggleKnob, toggleTween, {Position = newPos, BackgroundColor3 = newColor}):Play()
+                    TweenService:Create(ToggleSwitch, toggleTween, {BackgroundColor3 = state and Color3.fromRGB(80, 80, 80) or Color3.fromRGB(60, 60, 60)}):Play()
+                    callback(state)
+                end
+            end)
+        end
+        
+        return Tab
+    end
+    
+    return Window
+end
+
+return Linux
